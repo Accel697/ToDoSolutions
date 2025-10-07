@@ -38,5 +38,17 @@ namespace ToDo.Core.Tests
             Assert.Single(found);
             Assert.Equal("Buy milk", found[0].Title);
         }
+
+        [Fact]
+        public void Create_Json()
+        {
+            var list = new ToDoList();
+            list.Add("Buy milk");
+            list.Add("Read book");
+            list.Save("C:\\Users\\Accel\\Downloads\\ToDoList.json");
+            var testList = new ToDoList();
+            testList.Load("C:\\Users\\Accel\\Downloads\\ToDoList.json");
+            Assert.True(list.Count == 2);
+        }
     }
 }
