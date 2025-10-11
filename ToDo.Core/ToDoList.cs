@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ToDo.Core
@@ -24,5 +25,23 @@ namespace ToDo.Core
         public IEnumerable<ToDoItem> Find(string substring) => _items.Where(i => i.Title.Contains(substring ?? string.Empty, StringComparison.OrdinalIgnoreCase));
 
         public int Count => _items.Count;
+
+        public void Save(string path)
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+            var json = JsonSerializer.Serialize(_items, options);
+            File.WriteAllText(path, json);
+        }
+
+        public void Load(string path)
+        {
+            var json = File.ReadAllText(path);
+            var items = JsonSerializer.Deserialize<List<ToDoItem>>(json);
+            _items.Clear();
+            _items.AddRange(items);
+        }
     }
 }
